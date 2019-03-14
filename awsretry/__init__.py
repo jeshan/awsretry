@@ -127,8 +127,4 @@ class AWSRetry(CloudRetry):
         ]
         retry_on.extend(added_exceptions)
 
-        not_found = re.compile(r'^\w+.NotFound')
-        if response_code in retry_on or not_found.search(response_code):
-            return True
-        else:
-            return False
+        return response_code in retry_on
