@@ -83,10 +83,12 @@ class CloudRetry(object):
                                 max_tries -= 1
                                 max_delay *= backoff
                             else:
+                                logging.info("Returning original exception {0}...".format(str(e)))
                                 # Return original exception if exception is not
                                 # a ClientError.
                                 raise e
                         else:
+                            logging.info("Returning original exception {0}...".format(str(e)))
                             # Return original exception if exception is not a
                             # ClientError
                             raise e
