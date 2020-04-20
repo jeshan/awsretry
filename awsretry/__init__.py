@@ -114,9 +114,9 @@ class AWSRetry(CloudRetry):
 
     @staticmethod
     def status_code_from_exception(error):
-        if isinstance(error, botocore.exceptions.ClientError):
+        if isinstance(error, botocore.exceptions.ClientError) and 'Error' in error.response and 'Code' in error.response['Error']:
             return error.response['Error']['Code']
-        if isinstance(error, botocore.exceptions.WaiterError):
+        if isinstance(error, botocore.exceptions.WaiterError) and 'Error' in error.last_response  and 'Code' in error.last_response['Error']:
             return error.last_response['Error']['Code']
         elif hasattr(error, 'error_code'):
             return error.error_code
