@@ -75,20 +75,23 @@ class CloudRetry(object):
                         return f(*args, **kwargs)
                     except Exception as e:
                         base_exception_class = cls.base_class(e)
+                        e_string = str(e)
                         if isinstance(e, base_exception_class):
                             response_code = cls.status_code_from_exception(e)
                             if cls.found(response_code, added_exceptions):
-                                logging.info("{0}: Retrying in {1} seconds...".format(str(e), max_delay))
+                                logging.info("{0}: Retrying in {1} seconds...".format(e_string, max_delay))
                                 time.sleep(max_delay)
                                 max_tries -= 1
                                 max_delay *= backoff
                             else:
-                                logging.info("Returning original exception {0}...".format(str(e)))
+                                if e_string != 'cached-exception':
+                                    logging.info("Returning original exception {0}...".format(e_string))
                                 # Return original exception if exception is not
                                 # a ClientError.
                                 raise e
                         else:
-                            logging.info("Returning original exception {0}...".format(str(e)))
+                            if e_string != 'cached-exception':
+                                logging.info("Returning original exception {0}...".format(e_string))
                             # Return original exception if exception is not a
                             # ClientError
                             raise e
