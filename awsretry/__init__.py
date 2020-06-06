@@ -84,13 +84,13 @@ class CloudRetry(object):
                                 max_tries -= 1
                                 max_delay *= backoff
                             else:
-                                if e_string != 'cached-exception':
+                                if e_string != 'cached-exception' and 'overwrite existing cassette' not in e_string:
                                     logging.info("Returning original exception {0}...".format(e_string))
                                 # Return original exception if exception is not
                                 # a ClientError.
                                 raise e
                         else:
-                            if e_string != 'cached-exception':
+                            if e_string != 'cached-exception' and 'overwrite existing cassette' not in e_string:
                                 logging.info("Returning original exception {0}...".format(e_string))
                             # Return original exception if exception is not a
                             # ClientError
